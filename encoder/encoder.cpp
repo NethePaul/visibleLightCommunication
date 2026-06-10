@@ -64,9 +64,11 @@ void loop(){
   static bool a=true;
   set(a);
   a=!a;
+
+  bool bit=data.getNextBit();
   
-  if(data.getNextBit()){
-    start+=120;
+  if(bit){
+    start+=130;
     unsigned long d=millis();
     delay(start-d);
   }
@@ -75,5 +77,6 @@ void loop(){
     unsigned long d=millis();
     delay(start-d);
   }
+
   if(data.end())data.reset();
 }

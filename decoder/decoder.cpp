@@ -54,8 +54,6 @@ int decodeDelta(double delta){
   return r;
 }
 
-void decodeData(BitStream&stream);
-
 void decodeBit(BitStream&stream, double sub_delta, int delta, size_t frame_id, cv::Point loc, double v, bool rising){
   int b=decodeDelta(delta + sub_delta - stream.last_sub_delta);
   std::cout<<"exact delta: "<<(delta + sub_delta - stream.last_sub_delta)<<"  at: "<<frame_id<<" with: "<<v<<std::endl;
@@ -104,7 +102,7 @@ int hamming_distance(int a, int b){
 void decodeData(BitStream&stream){
   if(!stream.has_unprocessed_bit)return;
   stream.has_unprocessed_bit=0;
-  if((stream.last_bits&0xFFF) == 0xFFF){//start
+  if(!stream.receiving_data && (stream.last_bits&0xFFF) == 0xFFF){//start
     stream.start=1;
     stream.end=0;
     stream.c=0;
