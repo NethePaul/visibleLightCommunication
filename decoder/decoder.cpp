@@ -26,7 +26,6 @@ struct BitStream{
   size_t last_last_frame_id=0;
   uint64_t last_bits=0;
   double last_v=0;
-  char zero=0;
   char data=0;
   bool has_data=0;
   bool receiving_data=0;
@@ -88,16 +87,6 @@ void reviseBit(BitStream&stream, int&delta, size_t frame_id, bool rising, double
   stream.last_v=v;
   delta=frame_id-stream.last_frame_id;
 }
-
-int hamming_distance(int a, int b){
-  int d=0;
-  for(size_t i=0; i<sizeof(int)*8; i++){
-    if(((a>>i)&1) != ((b>>i)&1))
-      d++;
-  }
-  return d;
-}
-
 
 void decodeData(BitStream&stream){
   if(!stream.has_unprocessed_bit)return;
@@ -202,10 +191,7 @@ int main(int argc,const char**argv,const char**env){
     frame_previous,
     frame_current,
     frame_rising,
-    frame_falling,
-    frame_rising_thresh,
-    frame_falling_thresh,
-    comparison;
+    frame_falling;
   cv::Mat
     cpu_frame_rising,
     cpu_frame_falling,
