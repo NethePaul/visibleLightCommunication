@@ -33,10 +33,10 @@ play: $(BIN)
 	$(BIN)
 
 live: $(BIN) camera_config
-	$(BIN) /dev/video2
+	$(BIN) /dev/video0
 
 help: $(BIN)
 	$(BIN) -h
 
 camera_config:
-	cameractrls -d /dev/video2 -c "zoom_absolute=100,fps=30,white_balance_automatic=0,white_balance_temperature=7500,brightness=128,saturation=255,sharpness=255,contrast=180,focus_automatic_continuous=0,focus_absolute=0,auto_exposure=manual_mode,exposure_time_absolute=320,exposure_dynamic_framerate=0"
+	cameractrls -d /dev/video0 -c "zoom_absolute=100,fps=30,white_balance_automatic=0,white_balance_temperature=7500,brightness=128,saturation=255,sharpness=255,contrast=180,focus_automatic_continuous=0,focus_absolute=0,auto_exposure=manual_mode,exposure_time_absolute=320,exposure_dynamic_framerate=0"
