@@ -1,6 +1,6 @@
 #include <Arduino.h>
 
-#define WEBSERVER 1
+// #define WEBSERVER 1
 
 #ifdef WEBSERVER
 #include <Preferences.h>
