@@ -1,6 +1,6 @@
 #include <Arduino.h>
 
-// #define WEBSERVER 1
+#define WEBSERVER 1
 
 #ifdef WEBSERVER
 #include <Preferences.h>
@@ -15,17 +15,24 @@ class Data {
     int8_t ci = 7 + 8;
     String data = "";
     unsigned len = 0;
+    int repetitions = 0;
 
 public:
+    int get_repetitions()
+    {
+        return repetitions;
+    }
     bool end() { return bi > len + 1; };
     void set(String data)
     {
+        repetitions = 0;
         len = data.length();
         this->data = data;
         reset();
     }
     void reset()
     {
+        repetitions++;
         bi = 0;
         ci = 7 + 12;
     }
@@ -63,6 +70,13 @@ unsigned long start;
 WebServer server(80);
 Preferences p;
 
+void get_status()
+{
+    char message[25] { };
+    itoa(data.get_repetitions(), message, 10);
+    server.send(200, "text/plain", message);
+}
+
 void set_data()
 {
     if (server.args() == 0)
@@ -81,8 +95,12 @@ void not_found()
 void setup()
 {
     p.begin("my-prefrence");
-    WiFi.begin("ssid", "password");
+
+    Serial.begin(9600);
+    // WiFi.config()
+    WiFi.begin("12345678", "87654321");
     server.on("/set", set_data);
+    server.on("/status", get_status);
     server.onNotFound(not_found);
     server.begin(80);
     pinMode(LED, OUTPUT);
@@ -121,6 +139,13 @@ void loop()
 
 #ifdef WEBSERVER
     server.handleClient();
+    static int i = 0;
+    i++;
+    if (i == 2) {
+        Serial.println(WiFi.localIP());
+    } else if (i == 60) {
+        i = 0;
+    }
 #endif
 
     static bool a = true;
